@@ -26,6 +26,7 @@ class TaskCreateTestCase(APITestCase):
         )
         for attr, expected_value in task_attrs.items():
             self.assertEqual(response.data[attr], expected_value)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
 class TaskListTestCase(APITestCase):
@@ -33,6 +34,7 @@ class TaskListTestCase(APITestCase):
     def test_list_tasks(self):
         response = self.client.get('/api/tasks/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+      
 
 
 class TaskDestroyTestCase(APITestCase):
@@ -69,7 +71,7 @@ class TaskUpdateTestCase(APITestCase):
 
     def test_update_task(self):
         task = Task.objects.first()
-        response = self.client.put(
+        response = self.client.patch(
             '/api/update/{}/'.format(task.id),
             {
                 'title': 'Updated title',
